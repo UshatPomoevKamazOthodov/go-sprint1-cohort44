@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"github.com/gorilla/mux"
 	"go-sprint1-cohort44/middleware"
 	"net/http"
 )
@@ -9,12 +11,17 @@ import (
 // the <icon src="AllIcons.Actions.Execute"/> icon in the gutter and select the <b>Run</b> menu item from here.</p>
 
 func main() {
-	http.HandleFunc(`/getUrl`, middleware.GetUrlHandle)
-	http.HandleFunc(`/postUrl`, middleware.PostUrlHandle)
-	err := http.ListenAndServe(`:8080`, nil)
+	// Создаем новый маршрутизатор
+	r := mux.NewRouter()
+
+	// Регистрируем обработчики
+	r.HandleFunc("/getUrl", middleware.GetUrlHandle).Methods("GET")
+	r.HandleFunc("/postUrl", middleware.PostUrlHandle).Methods("POST")
+
+	// Запускаем сервер
+	fmt.Println("Listening on port :8080")
+	err := http.ListenAndServe(":8080", r)
 	if err != nil {
 		panic(err)
-	} else {
-		println("Listening on port 3000")
 	}
 }

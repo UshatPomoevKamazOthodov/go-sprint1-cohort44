@@ -3,6 +3,7 @@ module go-sprint1-cohort44
 go 1.24
 
 require (
+	github.com/gorilla/mux v1.8.1
 	github.com/stretchr/testify v1.10.0
 	go.mongodb.org/mongo-driver v1.17.4
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
