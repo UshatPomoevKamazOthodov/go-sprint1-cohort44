@@ -2,15 +2,19 @@ package db
 
 import (
 	"context"
-	"encoding/base64"
 	"errors"
 	"fmt"
+	"go-sprint1-cohort44/cfg"
 	"go-sprint1-cohort44/db/types"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"gopkg.in/mgo.v2/bson"
 	"log"
+	"math/rand"
+	"time"
 )
+
+const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 func ConnectToMongo() *mongo.Collection {
 	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
@@ -58,14 +62,18 @@ func InsertUrl(urlToEncode string) (string, error) {
 		return "", errors.New("url already exists")
 	}
 
-	s := urlToEncode
-
-	urlEncoded := base64.StdEncoding.EncodeToString([]byte(s))
+	rand.Seed(time.Now().UnixNano())
+	b := make([]byte, 10)
+	for i := range b {
+		b[i] = letterBytes[rand.Intn(len(letterBytes))]
+	}
+	urlEncoded := string(b)
 	objId := bson.NewObjectId()
+	cfg := cfg.GetConfigData()
 
 	insert := types.UrlAddress{
 		Id:         objId,
-		Url:        urlToEncode,
+		Url:        cfg.BaseURL + urlToEncode,
 		UrlReduced: urlEncoded,
 	}
 

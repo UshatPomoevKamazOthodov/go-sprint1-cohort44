@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"go-sprint1-cohort44/cfg"
 	"go-sprint1-cohort44/db"
 	"net/http"
 )
@@ -10,11 +11,12 @@ func GetUrlHandle(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Only GET requests are allowed!", http.StatusMethodNotAllowed)
 		return
 	}
+	cfg := cfg.GetConfigData()
 	queryParams := r.URL.Query()
 	urlParam := queryParams.Get("url")
 	shortenedUrl := db.GetUrl(urlParam)
 	w.Header().Set("Content-Type", "text/plain")
 	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte("http://localhost:8080/" + shortenedUrl))
+	w.Write([]byte("http://" + cfg.ServerAddr + shortenedUrl))
 	return
 }

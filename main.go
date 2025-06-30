@@ -1,16 +1,22 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/gorilla/mux"
+	"go-sprint1-cohort44/cfg"
 	"go-sprint1-cohort44/middleware"
 	"net/http"
 )
 
-//TIP <p>To run your code, right-click the code and select <b>Run</b>.</p> <p>Alternatively, click
-// the <icon src="AllIcons.Actions.Execute"/> icon in the gutter and select the <b>Run</b> menu item from here.</p>
-
 func main() {
+	flag.Parse()
+
+	cfg := cfg.GetConfigData()
+
+	// Выводим информацию о конфигурации
+	fmt.Println("Server on: " + cfg.ServerAddr)
+	fmt.Println("Base URL: " + cfg.BaseURL)
 	// Создаем новый маршрутизатор
 	r := mux.NewRouter()
 
@@ -19,8 +25,7 @@ func main() {
 	r.HandleFunc("/postUrl", middleware.PostUrlHandle).Methods("POST")
 
 	// Запускаем сервер
-	fmt.Println("Listening on port :8080")
-	err := http.ListenAndServe(":8080", r)
+	err := http.ListenAndServe(cfg.ServerAddr, r)
 	if err != nil {
 		panic(err)
 	}
