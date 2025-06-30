@@ -11,12 +11,12 @@ func GetUrlHandle(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Only GET requests are allowed!", http.StatusMethodNotAllowed)
 		return
 	}
-	cfg := cfg.GetConfigData()
+	config := cfg.GetConfigData()
 	queryParams := r.URL.Query()
 	urlParam := queryParams.Get("url")
 	shortenedUrl := db.GetUrl(urlParam)
 	w.Header().Set("Content-Type", "text/plain")
 	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte("http://" + cfg.ServerAddr + shortenedUrl))
+	w.Write([]byte("http://" + config.ServerAddr + shortenedUrl))
 	return
 }

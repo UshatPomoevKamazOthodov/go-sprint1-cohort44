@@ -69,11 +69,11 @@ func InsertUrl(urlToEncode string) (string, error) {
 	}
 	urlEncoded := string(b)
 	objId := bson.NewObjectId()
-	cfg := cfg.GetConfigData()
+	config := cfg.GetConfigData()
 
 	insert := types.UrlAddress{
 		Id:         objId,
-		Url:        cfg.BaseURL + urlToEncode,
+		Url:        config.BaseURL + urlToEncode,
 		UrlReduced: urlEncoded,
 	}
 

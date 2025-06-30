@@ -11,12 +11,12 @@ func PostUrlHandle(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Only POST requests are allowed!", http.StatusMethodNotAllowed)
 		return
 	}
-	cfg := cfg.GetConfigData()
+	config := cfg.GetConfigData()
 	shortenedUrl, err := db.InsertUrl(r.FormValue("url"))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 	w.WriteHeader(201)
-	w.Header().Set("Location", cfg.BaseURL+shortenedUrl)
+	w.Header().Set("Location", config.BaseURL+shortenedUrl)
 	return
 }

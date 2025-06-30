@@ -12,11 +12,11 @@ import (
 func main() {
 	flag.Parse()
 
-	cfg := cfg.GetConfigData()
+	config := cfg.GetConfigData()
 
 	// Выводим информацию о конфигурации
-	fmt.Println("Server on: " + cfg.ServerAddr)
-	fmt.Println("Base URL: " + cfg.BaseURL)
+	fmt.Println("Server on: " + config.ServerAddr)
+	fmt.Println("Base URL: " + config.BaseURL)
 	// Создаем новый маршрутизатор
 	r := mux.NewRouter()
 
@@ -25,7 +25,7 @@ func main() {
 	r.HandleFunc("/postUrl", middleware.PostUrlHandle).Methods("POST")
 
 	// Запускаем сервер
-	err := http.ListenAndServe(cfg.ServerAddr, r)
+	err := http.ListenAndServe(config.ServerAddr, r)
 	if err != nil {
 		panic(err)
 	}
