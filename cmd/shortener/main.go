@@ -26,6 +26,6 @@ func main() {
 	// Запускаем сервер
 	err := http.ListenAndServe(config.ServerAddr, r)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 }
