@@ -4,14 +4,14 @@ import (
 	"github.com/go-chi/chi/v5"
 	"go-sprint1-cohort44/internal/cache"
 	"go-sprint1-cohort44/internal/cfg"
-	"go-sprint1-cohort44/internal/middleware"
+	"go-sprint1-cohort44/internal/handlers"
 	"log"
 	"net/http"
 )
 
 func main() {
 	config := cfg.GetConfigData()
-	cache.InitCache()
+	storage.InitGlobalStorage()
 
 	// Выводим информацию о конфигурации
 	log.Printf("Server on: " + config.ServerAddr)
@@ -20,8 +20,8 @@ func main() {
 	r := chi.NewRouter()
 
 	// Регистрируем обработчики
-	r.Get("/getUrl", middleware.GetUrlHandle)
-	r.Post("/postUrl", middleware.PostUrlHandle)
+	r.Get("/getUrl", handlers.GetUrlHandle)
+	r.Post("/postUrl", handlers.PostUrlHandle)
 
 	// Запускаем сервер
 	err := http.ListenAndServe(config.ServerAddr, r)
