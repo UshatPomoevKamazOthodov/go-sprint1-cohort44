@@ -13,23 +13,24 @@ type URLPair struct {
 var GlobalStorage *MemoryStorage
 
 type MemoryStorage struct {
-	sync.RWMutex
-	urls     map[string]URLPair // ключ = оригинальный URL
-	reversed map[string]string  // ключ = сокращённый URL
-	nextID   int                // для генерации ID
+	mu       *sync.Mutex
+	nextID   int
+	urls     map[string]URLPair
+	reversed map[string]string
 }
 
 func InitGlobalStorage() {
 	GlobalStorage = &MemoryStorage{
+		mu:       &sync.Mutex{},
+		nextID:   1,
 		urls:     make(map[string]URLPair),
 		reversed: make(map[string]string),
-		nextID:   1,
 	}
 }
 
 func (s *MemoryStorage) Save(original string) URLPair {
-	s.Lock()
-	defer s.Unlock()
+	s.mu.Lock()
+	defer s.mu.Unlock()
 
 	short := randomString(10)
 	s.nextID++
@@ -46,16 +47,16 @@ func (s *MemoryStorage) Save(original string) URLPair {
 }
 
 func (s *MemoryStorage) GetByOriginal(original string) (URLPair, bool) {
-	s.RLock()
-	defer s.RUnlock()
+	s.mu.Lock()
+	defer s.mu.Unlock()
 
 	pair, found := s.urls[original]
 	return pair, found
 }
 
 func (s *MemoryStorage) GetUrl(reduced string) (string, bool) {
-	s.RLock()
-	defer s.RUnlock()
+	s.mu.Lock()
+	defer s.mu.Unlock()
 
 	original, found := s.reversed[reduced]
 	return original, found
