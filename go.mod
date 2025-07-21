@@ -5,6 +5,7 @@ go 1.24
 require (
 	github.com/caarlos0/env/v6 v6.10.1
 	github.com/go-chi/chi/v5 v5.2.2
+	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.10.0
 )
 

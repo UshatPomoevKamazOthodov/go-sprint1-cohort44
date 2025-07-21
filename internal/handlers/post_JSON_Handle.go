@@ -2,7 +2,9 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	storage "go-sprint1-cohort44/internal/cache"
+	"go-sprint1-cohort44/internal/cfg"
 	"net/http"
 	"net/url"
 )
@@ -16,6 +18,8 @@ type Response struct {
 }
 
 func PostJSONHandle(w http.ResponseWriter, r *http.Request) {
+	config := cfg.GetConfigData()
+	GlobalStorage := storage.InitGlobalStorage(config.BasePathToFile)
 	var req Request
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid JSON", http.StatusBadRequest)
@@ -27,10 +31,17 @@ func PostJSONHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	urlPair := storage.GlobalStorage.Save(req.URL)
+	checkForUrl, found := GlobalStorage.GetByOriginal(req.URL)
+
+	if found {
+		http.Error(w, fmt.Sprintf("%s already exists", checkForUrl.URLReduced), http.StatusBadRequest)
+		return
+	}
+
+	urlPair := GlobalStorage.Save(req.URL)
 
 	base := "http://" + r.Host
-	fullURL, err := url.JoinPath(base, urlPair.URLReduced)
+	fullURL, err := url.JoinPath(base, urlPair)
 	if err != nil {
 		http.Error(w, "Failed to build URL", http.StatusInternalServerError)
 		return

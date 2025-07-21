@@ -7,8 +7,9 @@ import (
 )
 
 type Config struct {
-	ServerAddr string `env:"SERVER_ADDRESS"`
-	BaseURL    string `env:"BASE_URL"`
+	ServerAddr     string `env:"SERVER_ADDRESS"`
+	BaseURL        string `env:"BASE_URL"`
+	BasePathToFile string `env:"BASE_PATH_TO_FILE"`
 }
 
 var cfg *Config
@@ -19,10 +20,9 @@ func init() {
 		log.Println("no environment variables found")
 		flag.Parse()
 
-		flag.StringVar(&cfg.ServerAddr, "a", "localhost:8080", "адрес сервера")
-		flag.StringVar(&cfg.BaseURL, "b", "http://localhost:8080/", "базовый адрес")
-		log.Println(cfg.ServerAddr)
-	}
+	flag.StringVar(&cfg.ServerAddr, "a", "localhost:8080", "адрес сервера")
+	flag.StringVar(&cfg.BaseURL, "b", "http://localhost:8080/", "базовый адрес")
+	flag.StringVar(&cfg.BasePathToFile, "f", "storage.json", "базовый путь к файлу")
 }
 
 func GetConfigData() *Config {
