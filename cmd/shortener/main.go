@@ -5,7 +5,6 @@ import (
 	"go-sprint1-cohort44/internal/cache"
 	"go-sprint1-cohort44/internal/cfg"
 	"go-sprint1-cohort44/internal/handlers"
-	"go-sprint1-cohort44/internal/middleware"
 	"log"
 	"net/http"
 )
@@ -20,8 +19,6 @@ func main() {
 
 	r := chi.NewRouter()
 
-	r.Use(middleware.Logger())
-
 	// Регистрируем обработчики
 	r.Get("/getUrl", handlers.GetUrlHandle)
 	r.Post("/postUrl", handlers.PostUrlHandle)
@@ -32,3 +29,4 @@ func main() {
 		log.Fatal(err)
 	}
 }
+func main() {}
