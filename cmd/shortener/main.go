@@ -5,6 +5,7 @@ import (
 	"go-sprint1-cohort44/internal/cache"
 	"go-sprint1-cohort44/internal/cfg"
 	"go-sprint1-cohort44/internal/handlers"
+	"go-sprint1-cohort44/internal/middleware"
 	"log"
 	"net/http"
 )
@@ -18,6 +19,7 @@ func main() {
 	log.Printf("Base URL: " + config.BaseURL)
 
 	r := chi.NewRouter()
+	r.Use(middleware.CompressionMiddleware)
 
 	// Регистрируем обработчики
 	r.Get("/getUrl", handlers.GetUrlHandle)
