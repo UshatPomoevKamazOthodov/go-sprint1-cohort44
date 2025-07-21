@@ -22,6 +22,7 @@ func main() {
 	// Регистрируем обработчики
 	r.Get("/getUrl", handlers.GetUrlHandle)
 	r.Post("/postUrl", handlers.PostUrlHandle)
+	r.Post("/api/shorten", handlers.PostJSONHandle)
 
 	// Запускаем сервер
 	err := http.ListenAndServe(config.ServerAddr, r)
@@ -29,4 +30,3 @@ func main() {
 		log.Fatal(err)
 	}
 }
-func main() {}
