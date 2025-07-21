@@ -7,16 +7,17 @@ import (
 )
 
 func GetUrlHandle(w http.ResponseWriter, r *http.Request) {
+	config := cfg.GetConfigData()
+	GlobalStorage := storage.InitGlobalStorage(config.BasePathToFile)
 	if r.Method != http.MethodGet {
 		http.Error(w, "Only GET requests are allowed!", http.StatusMethodNotAllowed)
 		return
 	}
 
-	config := cfg.GetConfigData()
 	queryParams := r.URL.Query()
 	urlParam := queryParams.Get("url")
 
-	original, found := storage.GlobalStorage.GetUrl(urlParam)
+	original, found := GlobalStorage.GetUrl(urlParam)
 	if !found {
 		http.NotFound(w, r)
 		return

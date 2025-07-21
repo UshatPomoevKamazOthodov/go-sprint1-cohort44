@@ -11,6 +11,7 @@ import (
 
 func PostUrlHandle(w http.ResponseWriter, r *http.Request) {
 	config := cfg.GetConfigData()
+	GlobalStorage := storage.InitGlobalStorage(config.BasePathToFile)
 	if config == nil {
 		http.Error(w, "Configuration is not initialized", http.StatusInternalServerError)
 		return
@@ -32,21 +33,25 @@ func PostUrlHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	checkForUrl, found := storage.GlobalStorage.GetByOriginal(postData)
+	if GlobalStorage == nil {
+		println("global storage nil")
+	}
+
+	checkForUrl, found := GlobalStorage.GetByOriginal(postData)
 	if found {
 		http.Error(w, fmt.Sprintf("%s already exists", checkForUrl.URLReduced), http.StatusBadRequest)
 		return
 	}
 
-	urlPair := storage.GlobalStorage.Save(postData)
+	urlPair := GlobalStorage.Save(postData)
 
-	location, err := url.JoinPath("http://"+config.ServerAddr, urlPair.URLReduced)
+	location, err := url.JoinPath("http://"+config.ServerAddr, urlPair)
 	if err != nil {
 		log.Printf("Server exited with error: %v", err)
 	}
 	w.Header().Set("Location", location)
 	w.WriteHeader(http.StatusCreated)
-	_, err = w.Write([]byte("Shortened URL: " + urlPair.URLReduced))
+	_, err = w.Write([]byte("Shortened URL: " + urlPair))
 	if err != nil {
 		log.Printf("Failed to write response %v", err)
 	}
