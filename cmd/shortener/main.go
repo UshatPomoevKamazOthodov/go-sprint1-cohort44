@@ -18,6 +18,7 @@ func main() {
 
 	r := chi.NewRouter()
 	r.Use(middleware.CompressionMiddleware)
+	r.Use(middleware.Logger())
 
 	// Регистрируем обработчики
 	r.Get("/getUrl", handlers.GetUrlHandle)

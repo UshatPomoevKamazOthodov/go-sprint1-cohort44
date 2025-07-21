@@ -20,11 +20,11 @@ func init() {
 		log.Println("no environment variables found")
 		flag.Parse()
 
-	flag.StringVar(&cfg.ServerAddr, "a", "localhost:8080", "адрес сервера")
-	flag.StringVar(&cfg.BaseURL, "b", "http://localhost:8080/", "базовый адрес")
-	flag.StringVar(&cfg.BasePathToFile, "f", "storage.json", "базовый путь к файлу")
+		flag.StringVar(&cfg.ServerAddr, "a", "localhost:8080", "адрес сервера")
+		flag.StringVar(&cfg.BaseURL, "b", "http://localhost:8080/", "базовый адрес")
+		flag.StringVar(&cfg.BasePathToFile, "f", "storage.json", "базовый путь к файлу")
+	}
 }
-
 func GetConfigData() *Config {
 	return cfg
 }
